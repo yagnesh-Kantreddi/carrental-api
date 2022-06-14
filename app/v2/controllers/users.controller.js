@@ -29,7 +29,7 @@ exports.login = function (req, res, next) {
     });
 };
 
-//register the user
+//register the user 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
 exports.register = function (req, res) {
     User.getUserByField({
         _id: req.body._id,

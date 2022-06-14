@@ -1,7 +1,7 @@
 const { ConnectionStates } = require("mongoose");
 const multer = require("multer");
 const  {GridFsStorage} = require("multer-gridfs-storage");
-
+const { v4: uuidv4 } = require('uuid');
 const storage = new GridFsStorage({
     url: process.env.mongoUrl,
     options: { useNewUrlParser: true, useUnifiedTopology: true },
@@ -13,12 +13,11 @@ const storage = new GridFsStorage({
             const filename = `${file.originalname}`;
             return filename;
         }
-
-        return {
+        let id=uuidv4();
+        req.id=id
+        return  {
             bucketName: "photos",
-            filetype:`${file.type}`,
-            _id:`yagnesh`,
-            filename: `${file.originalname}`,
+            filename: id,
         };
     },
 });

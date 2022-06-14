@@ -14,11 +14,12 @@ var usersController = require('./app/v2/controllers/users.controller.js');
 var kycController = require('./app/v2/controllers/kyc.controller.js');
 
 
+
 //routers
 var usersRouter = require('./app/v2/routes/users.routes.js');
 var otpRouter = require('./app/v2/routes/otp.route.js');
-var fileRouter = require('./app/v2/routes/kyc.route.js');
-
+var kycRouter = require('./app/v2/routes/kyc.route.js');
+var carRouter = require("./app/v2/routes/cardetails.route")
 cron.schedule("0 1 * * *", function () {
     notify.otpValidator()
     // console.log("running a task every 1 second");
@@ -47,13 +48,22 @@ const uploadFile = require("./app/v2/middlewares/upload");
 //test routes
 app.get('/test', testController.test);
 
+app.get("/file/:id", async (req, res) => {
+    console.log("/api/file/:id",req.params.id )
+    try {
+        const file = await gfs.files.findOne({ filename: req.params.id });
+        const readStream = gfs.createReadStream(file.filename);
+        readStream.pipe(res);
+    } catch (error) {
+        res.send("not found");
+    }
+})
+
 app.post("/api/file", uploadFile.single("file"), async (req, res) => {
-    console.log("---------",req.body)
+    console.log("---------", req.body, req)
     if (req.file === undefined) return res.send("you must select a file.");
     const imgUrl = `${process.env.host}/${req.file.filename}`;
-
-    kycController.updateFile(req.body,req.file.filename)
-    res.send({ url: imgUrl });
+    res.send({ fileId: req.file.filename });
 });
 
 //unsecured application routes
@@ -64,7 +74,9 @@ app.post('/register', usersController.register);
 app.use('/api', handleOptionsReq, passport.authenticate('jwt', { session: false }));
 app.use('/api/users', usersRouter);
 app.use('/api/otp', otpRouter);
-app.use('/api/file', fileRouter);
+app.use('/api/kyc', kycRouter);
+app.use('/api/car', carRouter);
+
 
 
 

@@ -7,6 +7,7 @@ const dotenv = require('dotenv').config();
 const environmant = app.settings.env;
 const path = require('path');
 
+const Grid = require("gridfs-stream");
 
 var appv2 = require('./app.v2.js');
 
@@ -42,6 +43,11 @@ mongoose.connect("mongodb+srv://yagnesh:mlab123@cluster0-s1fce.mongodb.net/carre
     console.log("Something went wrong!! ", error);
 });
 
+var conn = mongoose.connection;
+conn.once("open", function () {
+    gfs = Grid(conn.db, mongoose.mongo);
+    gfs.collection("photos");
+});
 
 app.listen(port, () => {
     console.log("Server started on port: " + port);

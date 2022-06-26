@@ -4,7 +4,10 @@ const optModel = require('../models/otp.model');
 const otpModel = require('../models/otp.model');
 
 exports.generateOtp = async (req, res) => {
-
+    otpModel.deleteOne({ "_id": req.body.id }, (err, data) => {
+        console.log(err, data)
+        // res.status(200).send(false)
+    })
     let otp = passwordGenerator.generate(6);
     let email = req.body.id
     // console.log(otp, email)

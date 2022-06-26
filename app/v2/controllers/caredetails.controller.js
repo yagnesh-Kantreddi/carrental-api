@@ -1,46 +1,51 @@
 
 const carModel = require('../models/cardetails.model');
 
-exports.getCars =async (req, res) => {
+exports.getCars = async (req, res) => {
     try {
-        carModel.find({},(err,data)=>{
-            console.log(err,data)
+        carModel.find({}, (err, data) => {
+            console.log(err, data)
+            res.status(200).send(data)
+        
         })
     } catch (error) {
         res.send("not found");
     }
 };
 
-exports.getCarById =async (req, res) => {
+exports.getCarById = async (req, res) => {
     try {
-        carModel.findOne({carId:id},(err,data)=>{
-            console.log(err,data)
+        console.log(req.params.id)
+        carModel.findOne({ carId: req.params.id }, (err, data) => {
+            console.log(err, data)
+            res.send(data)
         })
     } catch (error) {
         res.send("not found");
     }
 };
 
-exports.addDetails =async (body) => {
-    console.log("********body*******",body)
+exports.addDetails = async (req, res) => {
+    console.log("********body*******", req.body)
     try {
-        kycModel.create(obj,(err,data)=>{
-
+        carModel.create(req.body, (err, data) => {
+            console.log(err, data);
+            res.status(200).send(data)
         })
     } catch (error) {
-       
-    } 
+
+    }
 };
 
-exports.updateDetails =async (body) => {
-    console.log("********body*******",body)
+exports.updateDetails = async (body) => {
+    console.log("********body*******", body)
     try {
-        kycModel.update(obj,(err,data)=>{
+        carModel.update(obj, (err, data) => {
 
         })
     } catch (error) {
-       
-    } 
+
+    }
 };
 
 exports.removeDetails = async (req, res) => {
@@ -52,3 +57,5 @@ exports.removeDetails = async (req, res) => {
         res.send("An error occured.");
     }
 };
+
+

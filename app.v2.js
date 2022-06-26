@@ -73,7 +73,7 @@ app.post('/register', usersController.register);
 //secured routes - auth using user JWT
 app.use('/api', handleOptionsReq, passport.authenticate('jwt', { session: false }));
 app.use('/api/users', usersRouter);
-app.use('/api/otp', otpRouter);
+app.use('/otp', otpRouter);
 app.use('/api/kyc', kycRouter);
 app.use('/api/car', carRouter);
 

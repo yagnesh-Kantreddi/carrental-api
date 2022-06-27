@@ -31,6 +31,7 @@ exports.login = function (req, res, next) {
 
 //register the user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
 exports.register = function (req, res) {
+    console.log(req.body)
     User.getUserByField({
         _id: req.body._id,
     }, function (err, user) {
